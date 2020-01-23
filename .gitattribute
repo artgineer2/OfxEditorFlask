@@ -1,2 +1,2 @@
 *.py linguist-language=Python
-OfxEditorFlask/OfxEditorFlask/ofxeditor/static/js/*.js -linguist-vendored
+OfxEditorFlask/OfxEditorFlask/ofxeditor/static/js/*.js linguist-vendored
