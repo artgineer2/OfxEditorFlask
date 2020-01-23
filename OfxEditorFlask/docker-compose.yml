@@ -1,0 +1,48 @@
+version: '3'
+services:
+  ofxeditor:
+    build: ./ofxeditor
+    image: ofxeditor_app
+    env_file: ofxeditor/ofxeditor.env
+    volumes:
+      - static_volume:/usr/src/ofxeditor/static
+    depends_on:
+      - mongodb
+    networks:
+      - frontend
+      - backend
+
+  mongodb:
+    build: ./mongodb
+    image: ofxeditor_db
+    env_file: mongodb/mongodb.env
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+
+  nginx:
+    build: ./nginx
+    image: ofxeditor_server
+    env_file: nginx/nginx.env
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - static_volume:/usr/src/ofxeditor/static
+    depends_on:
+      - ofxeditor
+    networks:
+      - frontend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  mongodbdata:
+    driver: local
+  static_volume:
+    driver: local
