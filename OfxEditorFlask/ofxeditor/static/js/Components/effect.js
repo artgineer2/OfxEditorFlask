@@ -23,7 +23,7 @@ function Effect(parent, index, effectData)
     this.name = effectData.name;
     this.abbr = effectData.abbr;
 
-    
+
     var effectIoJson = {
       		"outputMap": [{"name":"output1", "x":900, "y":160},{"name":"output2", "x":900, "y":240}],
      		"name": "("+this.name+")",
@@ -46,33 +46,27 @@ function Effect(parent, index, effectData)
 
 
         this.effectIntraConnectionArray = effectData.connectionArray;
-        
+
         for (var effectIntraConnectionIndex = 0; effectIntraConnectionIndex < this.effectIntraConnectionArray.length; effectIntraConnectionIndex++)
         {
             var jsonConnectionData = this.effectIntraConnectionArray[effectIntraConnectionIndex];
             this.addEffectIntraConnection(jsonConnectionData);
         }
-    	
+
     }
     else
     {
- 
-    	/*jsonConnectionData = {
-            "src":{"effect": "(effect1)", "port": "input2"},"dest":{"effect": "(effect1)", "port": "output2"},
-            "parentEffect": "effect1","x1": 20,"y1": 240,"x2": 900,"y2": 240};*/
+
     	jsonConnectionData = {"srcEffect": "("+this.name+")","srcPort": "input2","destEffect": "("+this.name+")","destPort": "output2",
     			"parentEffect": "effect1","x1": 20,"y1": 240,"x2": 900,"y2": 240};
     	this.addEffectIntraConnection(jsonConnectionData);
-    	
-        /*jsonConnectionData = {
-        	"src":{"effect": "(effect1)","port": "input1"},"dest":{"effect": "(effect1)","port": "output1"},
-            "parentEffect": "effect1","x1": 20,"y1": 160,"x2": 900,"y2": 160};*/
+
     	jsonConnectionData = {"srcEffect": "("+this.name+")","srcPort": "input1","destEffect": "("+this.name+")","destPort": "output1",
                 "parentEffect": "effect1","x1": 20,"y1": 160,"x2": 900,"y2": 160};
         this.addEffectIntraConnection(jsonConnectionData);
     }
-    
-    
+
+
 
     if(effectData.controlArray)
     {
@@ -104,24 +98,10 @@ function parseConnectionKey(keyString)
 
     return parsedKey;
 }
-/*Effect.prototype.getEffectIndex = function()
-{
-    var effectIndex = 0;
-    if(combo)
-    {
-        for(var effectKey in combo.effectMap)
-        {
-            if(effectKey == this.name) break;
-            effectIndex++;
-        }
-    }
-
-    return effectIndex;
-}*/
 
 Effect.prototype.changeName = function(newName)
 {
-	
+
 
 
 }
@@ -176,8 +156,7 @@ Effect.prototype.getEffectData = function()
     effectDataMap.controlArray = new Array;
     effectDataMap.controlConnectionArray = new Array;
 
-    //for(var effectProcIndex = 0; effectProcIndex < this.effectProcessArray.length; effectProcIndex++)
-    
+
     /**************** PROCESSES AND INTRACONNECTIONS *******************************/
     for(var effectProcessKey in this.effectProcessMap)
     {
@@ -187,7 +166,6 @@ Effect.prototype.getEffectData = function()
 
     if(this.checkEffectIntraConnections() == false && comboDataError == false) comboDataError = true;
 
-    //for (var effectIntraConnectionIndex = 0; effectIntraConnectionIndex < this.effectIntraConnectionArray.length; effectIntraConnectionIndex++)
     for(var effectIntraConnectionKey in this.effectIntraConnectionMap)
     {
         var effectIntraConnection = this.effectIntraConnectionMap[effectIntraConnectionKey].getConnectionData();
@@ -204,7 +182,6 @@ Effect.prototype.getEffectData = function()
 
     if(this.checkEffectIntraConnections() == false && comboDataError == false) comboDataError = true;
 
-    //for (var effectIntraConnectionIndex = 0; effectIntraConnectionIndex < this.effectIntraConnectionArray.length; effectIntraConnectionIndex++)
     for(var effectControlConnectionKey in this.effectControlConnectionMap)
     {
         var effectControlConnection = this.effectControlConnectionMap[effectControlConnectionKey].getConnectionData();
@@ -218,23 +195,15 @@ Effect.prototype.getEffectData = function()
 Effect.prototype.addEffectProcess = function(jsonProcessData)
 {
     var parentEffect = {"name":this.name, "abbr":this.abbr};
-    //var effectIndex = this.getEffectIndex();
     var effectProcess = new Process(effectDrawingAreaSvg[this.index], jsonProcessData, parentEffect);
     this.effectProcessMap[effectProcess.name] = effectProcess;
-    //processMap[process.name].draw();//updateeffectDrawingArea();
     processTypeCount[effectProcess.type]++;
-    //processMap[process.name].updateEditorForm();
-    //updateProcessEditorArea(processMap);
 }
 
 Effect.prototype.addEffectIntraConnection = function(jsonConnectionData)
 {
     var src = {"effect":jsonConnectionData.srcEffect,"process":jsonConnectionData.srcProcess,"port":jsonConnectionData.srcPort};
     var dest = {"effect":jsonConnectionData.destEffect,"process":jsonConnectionData.destProcess,"port":jsonConnectionData.destPort};
-    //var effectIndex = this.getEffectIndex();
-    /*connectionDataMap.srcPort = this.src.port;
-    connectionDataMap.destProcess = this.dest.process;
-    connectionDataMap.destPort = this.dest.port;*/
 
     var wire = new Wire(effectDrawingAreaSvg[this.index], src, dest, this);
     this.effectIntraConnectionMap[wire.name] = wire;
@@ -242,45 +211,30 @@ Effect.prototype.addEffectIntraConnection = function(jsonConnectionData)
 
 Effect.prototype.deleteEffectProcess = function(target)
 {
-  /*var evt = d3.event;
-  var connectionArrayIndex, procInputIndex, procOutputIndex=0;
-  var target = evt.currentTarget*/
   var svgObject = target.farthestViewportElement;
   var svgChildNodes = svgObject.childNodes;
-  //var wires = document.getElementsByTagName("line");
 
   var effectProcess = target;
   var name = target.id;
   // delete connected wires before deleting process
   for(var processConnectionKey in processConnectionMap)
   {
-    /*var connectionKeyParse = processConnectionKey.split('>');
-    connectionKeyParse[0] = connectionKeyParse[0].split(':');
-    connectionKeyParse[1] = connectionKeyParse[1].split(':');
-    var connSrcProcess = connectionKeyParse[0][0];
-    var connSrcPort = connectionKeyParse[0][1];
-    var connDestProcess = connectionKeyParse[1][0];
-    var connDestPort = connectionKeyParse[1][1];*/
     var parsedKey = parseConnectionKey(processConnectionKey);
-    //if(processConnectionArray.length > 1)
-    {
       // delete wires connected to inputs
-      if(/*connDestProcess*/parsedKey["dest"]["process"] == name)
+      if(parsedKey["dest"]["process"] == name)
       {
         //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
         var target = document.getElementById(processConnectionKey);
         deleteConnection(target);
       }
       // delete wires connected to outputs
-      if(/*connSrcProcess*/parsedKey["src"]["process"] == name)
+      if(parsedKey["src"]["process"] == name)
       {
         var target = document.getElementById(processConnectionKey);
         deleteConnection(target);
         //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
       }
-    }
+
   }
 
   processTypeCount[effectProcessMap[effectProcess.id].type]--;
@@ -288,7 +242,6 @@ Effect.prototype.deleteEffectProcess = function(target)
   effectProcess.remove();
   updateProcessEditorArea(effectProcessMap);
 
-  //processRemoved = 1;
 }
 
 Effect.prototype.checkEffectIntraConnections = function()
@@ -347,12 +300,6 @@ Effect.prototype.checkEffectIntraConnections = function()
         {
             for(var j = 0; j < connArray.length; j++)
             {
-                /*if(connArray[i][1] == connArray[j][0] && (connArray[i][1][0] != '(') && (connArray[j][0][0] != '('))
-                {
-                    connArray[i][1] = connArray[j][1];
-                    connArray.splice(j,1);
-                    breakLoops = true;
-                }*/
                 if(firstConnection[1] == connArray[j][0] )
                 {
                     firstConnection[1] = connArray[j][1];
@@ -380,7 +327,6 @@ Effect.prototype.checkEffectIntraConnections = function()
                  break;
              }
 
-             //if(i == connArray.length - 1)
         }
         // scanned too many times, indicating bad/loose connection
         if(scanCount == connArrayStartSize + 10)
@@ -412,23 +358,15 @@ Effect.prototype.checkEffectIntraConnections = function()
 Effect.prototype.addEffectControl = function(jsonControlData)
 {
     var parentEffect = {"name":this.name, "abbr":this.abbr};
-    //var effectIndex = this.getEffectIndex();
     var effectControl = new Control(effectDrawingAreaSvg[this.index], jsonControlData, parentEffect);
     this.effectControlMap[effectControl.name] = effectControl;
-    //processMap[process.name].draw();//updateeffectDrawingArea();
     controlCount++;
-    //processMap[process.name].updateEditorForm();
-    //updateProcessEditorArea(processMap);
 }
 
 Effect.prototype.addEffectControlConnection = function(jsonControlConnectionData)
 {
     var src = jsonControlConnectionData.src;
     var dest = jsonControlConnectionData.dest;
-    //var effectIndex = this.getEffectIndex();
-    /*connectionDataMap.srcPort = this.src.port;
-    connectionDataMap.destProcess = this.dest.process;
-    connectionDataMap.destPort = this.dest.port;*/
 
     var controlWire = new ControlWire(effectDrawingAreaSvg[this.index], src, dest, this);
     this.effectControlConnectionMap[controlWire.name] = controlWire;
@@ -443,5 +381,5 @@ function deleteEffect(effectName)
 		totalCpuPowerRequired -= combo.effectMap[effectName].effectProcessMap[processKey].cpuPower;
 	}
     delete combo.effectMap[effectName];
-    
+
 }

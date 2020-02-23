@@ -21,9 +21,6 @@ function Combo(comboData)
     		if(this.effectArray[i].index == effectIndex)
     		{
                 var jsonEffectData = this.effectArray[i];
-                /*jsonEffectData.inputMap = arrayToMap(jsonProcessData.inputArray);
-                jsonEffectData.outputMap = arrayToMap(jsonProcessData.outputArray);
-                jsonEffectData.paramMap = arrayToMap(jsonProcessData.paramArray);*/
                 var effect = new Effect(effectDrawingAreaSvg[effectIndex], jsonEffectData.index, jsonEffectData);
                 this.effectMap[effect.name] = effect;
     		}

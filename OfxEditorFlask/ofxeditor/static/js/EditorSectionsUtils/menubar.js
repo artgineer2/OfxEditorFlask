@@ -36,18 +36,14 @@ function newCombo()
 					"name": "effect0",
 					"abbr": "fx0",
 					"processArray": [],
-					"connectionArray": []/*,
-					"controlArray": [],
-					"controlConnectionArray": []*/
+					"connectionArray": []
 				},
 				{
 					"index":1,
 					"name": "effect1",
 					"abbr": "fx1",
 					"processArray": [],
-					"connectionArray": []/*,
-					"controlArray": [],
-					"controlConnectionArray": []*/
+					"connectionArray": []
 				}
 		],
 		"effectConnectionArray":[
@@ -136,7 +132,7 @@ function saveCombo()
             }
         });
 
-		
+
         var comboString = JSON.stringify(combo.getComboData());
         console.log(comboString);
 		suspendUpdates = 1;
@@ -172,7 +168,6 @@ function deleteCombo()
         }
     });
 
-    //console.log(JSON.stringify(comboArray));
 	suspendUpdates = 1;
     $.ajax({type: 'DELETE', url: 'deleteCombo/' + currentCombo, dataType: "json"}).success(function (data, status) {
         updateComboList(data);
@@ -194,10 +189,7 @@ function updateComboList(combos)
                                 .attr({'id':combo_list.name})
                                 .text(combo_list.name)));
         $('#'+combo_list.name).click(function(){getCombo(combo_list.name);});
-    });/*.error(function (ts) {
-        console.log("Error");
-        console.log(ts.responseText);
-    });*/
+    });
 }
 
 function getComboList()
@@ -205,7 +197,6 @@ function getComboList()
 	suspendUpdates = 1;
 
     $.ajax({url: 'listCombos', dataType: "json"}).success(function (data, status) {
-        //console.log(JSON.stringify(data));
         $('#comboMenu').empty();
         $.each(data, function (index, combo_list) {
             $('#comboMenu')
@@ -230,24 +221,6 @@ function initMenubar()
     getComboList();
     resetProcessTypeCount();
 
-	//$('#cpuPowerRequirementIndicatorListItem').attr({"class":"col-md-6"});
-	/*$('#cpuPowerRequirementIndicatorDiv').attr({"class":"col-md-4"})
-	.append($('<div>').attr({"class":"col-md-1"}))
-	.append($('<label>')
-			.attr({"for": "cpuPowerRequirementIndicator",
-				
-				"id": "cpuPowerRequirementValue"})
-			.text("Cpu Power Required: "))
-		.append($('<div>')
-			.append($('<input>')
-					.attr({"id": "cpuPowerRequirementIndicator",
-						"type": "range",
-						"value": 10,
-						"name": "cpuPowerRequirementIndicator",
-						"min": 0,
-						"max": 100,
-					})));
-	$('#cpuPowerRequirementIndicator').val(0);*/
 
 }
 

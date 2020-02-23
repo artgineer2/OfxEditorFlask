@@ -33,10 +33,6 @@ Label.prototype.print = function()
 
 function Connector(parent,process,name,type,x,y)
 {
-	/*var tempParent = parent;
-  var tempParent0 = tempParent[0];
-  var tempParent00 = tempParent0[0];
-  this.parentProcess = parent[0][0].id;*/
 	this.parent = parent;
 	this.process = process;
 	this.connector = null;
@@ -71,7 +67,7 @@ Connector.prototype.draw = function()
 	}
 
 
-	this.connector = this.parent/*.selectAll("g")*/
+	this.connector = this.parent
 	.append("circle")
 	.attr("cx", function(){return data.x;})
 	.attr("cy", function(){return data.y;})
@@ -102,19 +98,8 @@ Connector.prototype.draw = function()
 	var tempTag = document.getElementById(data.process+':'+data.name);
 	tempTag.setAttribute('data',JSON.stringify(data));
 
-	/*var label = new Label(this.parent, this.name,
-     this.x, this.y);
-  label.print()*/
-
 
 }
-/*Connector.prototype.clicked = function()
-{
-  clickedConnector.process = this.parent;
-  clickedConnector.name = this.name;
-  clickedConnector.type = this.type;
-  mouseClickConnectorFunct();
-}*/
 
 Connector.prototype.erase = function()
 {
@@ -200,7 +185,6 @@ Symbol.prototype.draw = function(graphic)
 	  {
 	  	direction = "normal";
 	  }
-  //var symbolData = {"graphic":this.graphic, "wires":this.wires, "body":this.body, "label":"", "direction":direction, "color":this.color};
   	var symbolData;
 
 	if(this.process)
@@ -218,7 +202,6 @@ Symbol.prototype.draw = function(graphic)
 	}
 
   this.symbolBody = this.parent
-  //.append("g")
   .append("polygon")
   .attr("points", function(){
     var dummy = symbolData.body;
@@ -235,8 +218,6 @@ Symbol.prototype.draw = function(graphic)
   .attr("stroke","#000000")
   .attr("stroke-width",1.500)
   .attr("fill",function(){return symbolData.color;});
-  //.on("mousedown", function(){mouseDown();});
-  /*.on("mouseup", function(){mouseUp();})*/
 
   this.symbolWires = this.parent
   .append("path")
@@ -274,14 +255,9 @@ Symbol.prototype.draw = function(graphic)
   .attr("fill",function(){return "none";})
   .attr("stroke-width",1.500)
   .attr("stroke","#000000");
-  //.on("mousedown", function(){mouseDown();});
-  /*.on("mouseup", function(){mouseUp();})*/
 
 
   var process = this.parent[0][0];
-  /*var label = new Label(this.parent, process.id,
-     20, 0);
-  label.print();*/
 
 
   this.symbolLabel = this.parent
@@ -346,7 +322,6 @@ function Parameter(parentEditor,parentSymbol,parentProcess,name,abbr,alias,value
 
 Parameter.prototype.draw = function()
 {
-//  var parentProcess = this.parent
     var rangeMax = 99;
     var effectName = this.parentProcess.parentEffect;
     var procName = this.parentProcessName;
@@ -356,11 +331,6 @@ Parameter.prototype.draw = function()
     {
         var paramValueIndex = parseInt(combo.effectMap[combo.currentEffect].effectProcessMap[procName].paramMap[paramName].value);
         var paramValueString = getParameterValueString(paramValueIndex, this.type)
-        //var parsedId = this.id.split(":");
-        //var processName = this.parentProcessName;
-        //var paramName = this.name;
-
-      /*$('#effectEditorForm').append($('<div>')*/
         this.parentEditor.append($('<div>')
             .attr({"id": this.name + "Div",
                 "class": "form-group row"
@@ -375,10 +345,6 @@ Parameter.prototype.draw = function()
                     .append($('<input>')
                             .attr({"id": this.parentProcessName + ":" + this.name+":decrement",
                                 "type": "button",
-                                /*"value": this.value,
-                                "name": this.name,
-                                "min": 0,
-                                "max": rangeMax,*/
                             }).on("click", function (evt) {
                               var decrementIdArray = evt.currentTarget.id.split(":")
                               var sliderId = decrementIdArray[0] + ":" + decrementIdArray[1] + ":slider";
@@ -402,10 +368,6 @@ Parameter.prototype.draw = function()
                     .append($('<input>')
                             .attr({"id": this.parentProcessName + ":" + this.name+":increment",
                                 "type": "button",
-                                /*"value": this.value,
-                                "name": this.name,
-                                "min": 0,
-                                "max": rangeMax,*/
                             }).on("click", function (evt) {
                               var incrementIdArray = evt.currentTarget.id.split(":")
                               var sliderId = incrementIdArray[0] + ":" + incrementIdArray[1] + ":slider";
@@ -414,13 +376,10 @@ Parameter.prototype.draw = function()
                               $(sliderIdjQuery).change();
                     })))
 
-            /*var pedalUiEnable = document.createElement("input", {"type": "checkbox"});
-             pedalUiEnable.type = "checkbox";*/
             .append($('<input>').attr({"id":this.parentProcessName + ":" + this.name+":value","type": "text", "class": "col-md-1", "value": paramValueString}))
         ));
     }
 
-    //this.controlConn.draw();
 
 }
 
@@ -482,10 +441,9 @@ Footswitch.prototype.draw = function()
            )
            .change(function(){
                footswitchObject.process.footswitchNumber = parseInt($('#footswitchNumber').val());
-               //alert(footswitchObject.process.footswitchNumber);
            }));
 
-    for(var i = 0; i <= 2; i++)//$.each(footswitchNumberArray, function(i, number)
+    for(var i = 0; i <= 2; i++)
     {
         if(i == 0)
         {
@@ -515,7 +473,6 @@ function ControlParameter(parentEditor, controlParameter, parentControl)
 
 ControlParameter.prototype.draw = function()
 {
-//  var parentProcess = this.parent
     var rangeMax = 99;
     var controlName = this.parentControl.name;
     var paramName = this.name;
@@ -525,12 +482,8 @@ ControlParameter.prototype.draw = function()
     {
         var paramValueIndex = parseInt(combo.effectMap[combo.currentEffect].effectControlMap[controlName].controlParameterMap[paramName].value);
         var paramValueString = getParameterValueString(paramValueIndex, this.type)
-        //var parsedId = this.id.split(":");
-        //var processName = this.parentProcessName;
-        //var paramName = this.name;
 
       $('#effectEditorForm').append($('<div>')
-        //this.parentEditor.append($('<div>')
             .attr({"id": paramName + "Div",
                 "class": "form-group row"
             }
@@ -544,10 +497,6 @@ ControlParameter.prototype.draw = function()
                     .append($('<input>')
                             .attr({"id": controlName + ":" + paramName+":decrement",
                                 "type": "button",
-                                /*"value": this.value,
-                                "name": this.name,
-                                "min": 0,
-                                "max": rangeMax,*/
                             }).on("click", function (evt) {
                               var decrementIdArray = evt.currentTarget.id.split(":")
                               var sliderId = decrementIdArray[0] + ":" + decrementIdArray[1] + ":slider";
@@ -572,10 +521,6 @@ ControlParameter.prototype.draw = function()
                     .append($('<input>')
                             .attr({"id": controlName + ":" + paramName+":increment",
                                 "type": "button",
-                                /*"value": this.value,
-                                "name": this.name,
-                                "min": 0,
-                                "max": rangeMax,*/
                             }).on("click", function (evt) {
                               var incrementIdArray = evt.currentTarget.id.split(":")
                               var sliderId = incrementIdArray[0] + ":" + incrementIdArray[1] + ":slider";
@@ -586,10 +531,7 @@ ControlParameter.prototype.draw = function()
                     })))
 
 
-            /*var pedalUiEnable = document.createElement("input", {"type": "checkbox"});
-             pedalUiEnable.type = "checkbox";*/
             .append($('<input>').attr({"id":controlName + ":" + paramName+":value","type": "text", "class": "col-md-1", "value": paramValueString}))
-            /*.append($('<div>').attr({"class": "col-md-1"}))*/
             .append($('<input>').attr({"id":controlName + ":" + paramName+":alias","type": "text", "class": "col-md-2", "value": controlParameterObject.alias}))
             .append($('<input>').attr({"id":controlName + ":" + paramName+":abbr","type": "text", "class": "col-md-1", "value": controlParameterObject.abbr}))
             .append($('<input>').attr({"id":controlName + ":" + paramName, "type": "button", "class": "col-md-2", "value": "Update Pedal UI Info"})
@@ -627,16 +569,11 @@ function ParameterControlType(parentEditor ,parentControl)
     if(parentControl.type != null)
     {
         this.type = parentControl.type; // 0: Normal, 1: Envelope Generator, 2: Low Frequency Oscillator
-        //this.controlParameterArray = parentControl.paramArray;
     }
     else
     {
         this.type = "Norm"; // 0: Normal, 1: Envelope Generator, 2: Low Frequency Oscillator
-        /*controlParameter = {"name":"parameter1","alias":"parameter1","abbr":"prm1","value":0}
-        this.parentControl.controlParameterMap["parameter1"] =
-        	new ControlParameter(this.parentEditor, controlParameter, this.parentControl);*/
     }
-    //this.connectedProcessParameter = null;
 }
 
 
@@ -656,8 +593,6 @@ ParameterControlType.prototype.draw = function()
     this.parentEditor.append($('<div>')
           .attr({"id": "parameterControlTypeDiv",
               "class": "form-group row"})
-          /*.append($('<label>')
-                  .attr({"class": "col-md-5", "style":"border:1px solid"})*/
 		  .append($('<div>').attr({"class": "col-md-3"})
           .append($('<select>')
                     .attr({"name":"parameterControlType","id":"parameterControlType"})
@@ -705,7 +640,6 @@ ParameterControlType.prototype.draw = function()
 				var conMapKey = parameterControlObject.parentControl.name;
 				combo.effectMap[combo.currentEffect].effectControlMap[conMapKey].erase();
 				combo.effectMap[combo.currentEffect].effectControlMap[conMapKey].draw();
-               //alert(footswitchObject.process.footswitchNumber);
            }))
 
     );

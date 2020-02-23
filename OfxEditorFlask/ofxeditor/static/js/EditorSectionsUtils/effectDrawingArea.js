@@ -33,16 +33,6 @@ function getScreenCTM(doc){
 }
 
 
-
-
-
-
-function updateProcessConnectionArray()
-{
-
-
-}
-
 function effectDrawingAreaInit() {
     // use D3 API
 
@@ -73,9 +63,6 @@ function effectDrawingAreaInit() {
                     .append($('<a>').attr({"href": "#", "id": "comboHeader"})
                             .text("Combo Header")));
 
-    /*$('#comboDrawingAreaCanvas').css("display","block");
-    $('#comboDrawingAreaCanvas').css("width", 1000);
-    $('#comboDrawingAreaCanvas').css("height", 350);*/
 
     $('#effectDrawingAreaCanvas').css("display","block");
     $('#effectDrawingAreaCanvas').css("width", 1000);
@@ -109,34 +96,5 @@ function effectDrawingAreaInit() {
 
 function updateEffectDrawingArea(effect)
 {
-    //var effectIndex = effect.getEffectIndex();
-    
-    //var allSvg = effectDrawingAreaSvg[effectIndex].selectAll("*").remove();
-    //allSvg.remove();
-
-    /*var effectProcessArray = effect.processArray;
-    var effectIntraProcessConnectionArray = effect.connectionArray;
-
-    for (var effectProcessIndex = 0; effectProcessIndex < effectProcessArray.length; effectProcessIndex++)
-    {
-        effectProcessArray[effectProcessIndex].draw();
-    }
-
-    for (var effectIntraProcessConnectionIndex = 0; effectIntraProcessConnectionIndex < effectIntraProcessConnectionArray.length; effectIntraProcessConnectionIndex++)
-    {
-        effectIntraProcessConnectionArray[effectIntraProcessConnectionIndex].draw();
-    }*/
     effect.draw();
-
-  /*for(var processKey in processMap)
-  {
-     processMap[processKey].setLocation();
-  }
-  //updateProcesses(processMap);
-  for(var connectionKey in processConnectionMap)
-  {
-    processConnectionMap[connectionKey].setLocation();
-  }
-  //updateConnections(processConnectionArray);*/
-
 }

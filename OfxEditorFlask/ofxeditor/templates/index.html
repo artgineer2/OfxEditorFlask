@@ -1,185 +1,227 @@
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=UTF8">
-        <title>OFX Editor</title>
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/variables.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/events.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/editorUtils.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/SubComponents/editorInclude.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/wire.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/process.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/control.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/controlWire.js') }}"></script>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF8">
+	<title>OFX Editor</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-theme.css') }}">
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/variables.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/events.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/editorUtils.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/SubComponents/editorInclude.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/wire.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/process.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/control.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/controlWire.js') }}"></script>
 
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/component.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/effectDrawingArea.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/sidebar.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/menubar.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/cord.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/effect.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/effectEditor.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/combo.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/values.js') }}"></script>
-		<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/updates.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/component.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/effectDrawingArea.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/sidebar.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/menubar.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/cord.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/effect.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/effectEditor.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/Components/combo.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/values.js') }}"></script>
+	<script language="javascript" type="text/javascript" src="{{ url_for('static', filename='js/EditorSectionsUtils/updates.js') }}"></script>
 
 
-    </head>
-    <body onload="main()">
-        <!--  Place plugin GUI code here --->
-        <input type="hidden" id="compArray" value="{{ json_component_list }}" />
-		<!--  <div>
-			<img src="{{ url_for('static', filename='AppPhoto.png') }}" style="width:700px;height:500px;border:1px solid black;">
-		</div>--->
-        <div class="container" style="border: 1px solid;">
-               <div id="menubar" class="row">
-               <div id="statusBox" class="col-md-2 navbar-inverse" style="height:52px;">
+</head>
+<body onload="main()">
+	<!--  Place plugin GUI code here --->
+	<input type="hidden" id="compArray" value="{{ json_component_list }}" />
+	<!--  <div>
+	<img src="{{ url_for('static', filename='AppPhoto.png') }}" style="width:700px;height:500px;border:1px solid black;">
+</div>--->
+<div class="container-fluid" style="border: 1px solid;">
+	<div class="row" >
+		<div class='col-lg-3' >
+			<div style="overflow-y: auto; height:800px;">
+				<h2><b>Creating a Combo</b></h2>
+				<p style="padding-left: 3em;">Click on <b>New Combo</b>.  This will create a blank combo, which is simply a straight-thru signal path.</p>
+				<ol>
+					<li><h3><b>Setting combo tabs</b></h3></li>
+					<ol>
+						<li>To show the Combo Name Editor, right-click on the <b>new</b> tab.</li>
+						<li>To show the Effect Name Editor, right-click on an <b>effect</b>X tab.  The second text box is for the effect abbreviation, which will be displayed in the effect tab.</li>
+					</ol>
+					<li><h3><b>Creating an effect</b></h4></li>
+					<ol>
+						<li><h4><b>Adding and connecting process components</b></h4>
+							<ol>
+								<li>To delete a connection line, place the mouse over the line such that the line turns red, then double click on the line.</li>
+								<li>To add a process component, click on the desired component in the sidebar.  The new process will be placed in the top left corner of drawing area.  Drag it to the desired position.</li>
+								<li>To connect a process output to another process input, place the mouse over a process output connection dot such the dot turns red, and click on it.  Do the same for the other process input connection.  A connection line with appear when clicking on the second dot (this can also be done in reverse).</li>
+							</ol>
+						</li>
+						<li><h4><b>Configuring the process settings</b></h4>
+							<ol>
+								<li>To configure the settings in a process, right click on the process, and the process editor will appear in the area below the drawing area.  To change a parameter, the mouse can be used to move the slider, smaller changes can be made by clicking on the buttons on either end of the slider.</li>
+							</ol>
+						</li>
+						<li><h4><b>Adding,connecting and configuring process parameter controllers</b></h4>
+							<ol>
+								<p>Each of the connection dots at the bottom of the process corresponds to the parameters seen in the process editor, with the left-most dot corresponding to the top-most parameter in the editor.</p>
+								<li>To connect a process parameter controller output to a process parameter input, use the same method used for connecting process inputs and outputs.</li>
+								<li>To configure the settings in a process parameter controller, use the same method for configuring setting in process.</li>
+							</ol>
+						</li>
+					</ol>
+				</ol>
+			</div>
+		</div>
+		<div class="col-lg-9">
+			<div id="menubar" class="row">
+				<div id="statusBox" class="col-md-2 navbar-inverse" style="height:52px;">
 
-		   	   </div>
-                <div class="col-md-10 navbar-inverse" style="border: 1px solid;">
-                    <ul class="nav navbar-nav">
+				</div>
+				<div class="col-md-10 navbar-inverse" style="border: 1px solid;">
+					<ul class="nav navbar-nav">
 						<li></li>
-                        <li id="newComboListItem"><a href="#" id="newCombo" onclick="newCombo();" style="color:white;font-weight:bold">New Combo</a></li>
-                        <li class="dropdown" id="loadComboListItem">
-                            <a href="#" id="loadComboLink" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"  style="color:white;font-weight:bold">Load Combo<span class="caret"></span></a>
-                            <ul class="dropdown-menu" id="comboMenu">
+						<li id="newComboListItem"><a href="#" id="newCombo" onclick="newCombo();" style="color:white;font-weight:bold">New Combo</a></li>
+						<li class="dropdown" id="loadComboListItem">
+							<a href="#" id="loadComboLink" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"  style="color:white;font-weight:bold">Load Combo<span class="caret"></span></a>
+							<ul class="dropdown-menu" id="comboMenu">
 
-                            </ul>
-                        </li>
-                        <li id="saveComboListItem"><a href="#" onclick="saveCombo();" style="color:white;font-weight:bold">Save Combo</a></li>
-                        <li id="deleteComboListItem"><a href="#" onclick="deleteCombo();" style="color:white;font-weight:bold">Delete Combo</a>
-                        </li>
-                    </ul>
-                </div>
-             </div> <!--  End of menubar --->
-            <div id="sidebar_effectDrawingArea_Editor" class="row">
-                <div id="sidebar" class="col-sm-2 navbar-inverse"
-                     style="border: 1px solid;overflow-y:auto;overflow-x:hidden;height:670px">
-                    <ul class="nav sidebar-nav" id="componentList">
-                        <!--*********** use ajax here ***********-->
-                    </ul>
-                </div><!-- sidebar -->
-                <div id="effectDrawingArea_Editor"  class="col-sm-10"  style="border: 1px solid;height:670px;" x="0" y="0" >
-                    <div id="effectDrawingArea" class="row" style="border: 1px solid;">
-						<div class="col-sm-12">
-	                        <div id="effectDrawingAreaTabGroupDiv" class="row" style="border: 1px solid;">
-	                            <ul id="effectDrawingAreaTabGroupUL" class="nav nav-tabs col-sm-12">
-	                            </ul>
+							</ul>
+						</li>
+						<li id="saveComboListItem"><a href="#" onclick="saveCombo();" style="color:white;font-weight:bold">Save Combo</a></li>
+						<li id="deleteComboListItem"><a href="#" onclick="deleteCombo();" style="color:white;font-weight:bold">Delete Combo</a>
+						</li>
+					</ul>
+				</div>
+			</div> <!--  End of menubar --->
+			<div id="sidebar_effectDrawingArea_Editor" class="row">
+				<div id="sidebar" class="col-sm-2 navbar-inverse"
+				style="border: 1px solid;overflow-y:auto;overflow-x:hidden;height:800px">
+					<ul class="nav sidebar-nav" id="componentList">
+						<!--*********** use ajax here ***********-->
+					</ul>
+				</div><!-- sidebar -->
 
-	                        </div>
-	                        <div id="effectDrawingAreaCanvas" class="row">
-		                    	<div id="comboDrawingAreaCanvas" class="col-sm-12">
 
-		                        </div>
-		                    	<div id="effectDrawingAreaCanvas_0" class="col-sm-12">
+			<div id="effectDrawingArea_Editor"  class="col-sm-10"  style="border: 1px solid;height:800px;" x="0" y="0" >
+				<div id="effectDrawingArea" class="row" style="border: 1px solid;">
+					<div class="col-sm-12">
+						<div id="effectDrawingAreaTabGroupDiv" class="row" style="border: 1px solid;">
+							<ul id="effectDrawingAreaTabGroupUL" class="nav nav-tabs col-sm-12">
+							</ul>
 
-		                        </div>
-		                    	<div id="effectDrawingAreaCanvas_1" class="col-sm-12">
-
-		                        </div>
-		                    	<div id="effectDrawingAreaCanvas_2" class="col-sm-12">
-
-		                        </div>
-
-	                        </div>
-							<div id="effectTabEditor" style="display:none" class="row">
-								<h3>Effect Name Editor</h3>
-								<input id="oldEffectName" type="hidden">
-								<input id="oldEffectAbbr" type="hidden">
-								<input id="newEffectName" type="text">
-								<input id="newEffectAbbr" type="text">
-								<input type="button" value="OK" onclick="changeEffectNameAbbr();">
-								<input type="button" value="Cancel" onclick="hideEffectTabEditor();">
+						</div>
+						<div id="effectDrawingAreaCanvas" class="row">
+							<div id="comboDrawingAreaCanvas" class="col-sm-12">
 
 							</div>
-							<div id="comboTabEditor" style="display:none" class="row">
-								<h3>Combo Name Editor</h3>
-								<input id="oldComboName" type="hidden">
-								<input id="newComboName" type="text">
-								<input type="button" value="OK" onclick="changeComboName();">
-								<input type="button" value="Cancel" onclick="hideComboTabEditor();">
+							<div id="effectDrawingAreaCanvas_0" class="col-sm-12">
+
+							</div>
+							<div id="effectDrawingAreaCanvas_1" class="col-sm-12">
+
+							</div>
+							<div id="effectDrawingAreaCanvas_2" class="col-sm-12">
 
 							</div>
 
 						</div>
+						<div id="effectTabEditor" style="display:none" class="row">
+							<h3>Effect Name Editor</h3>
+							<input id="oldEffectName" type="hidden">
+							<input id="oldEffectAbbr" type="hidden">
+							<input id="newEffectName" type="text">
+							<input id="newEffectAbbr" type="text">
+							<input type="button" value="OK" onclick="changeEffectNameAbbr();">
+							<input type="button" value="Cancel" onclick="hideEffectTabEditor();">
 
-                    </div>   <!--effectDrawingArea -->
+						</div>
+						<div id="comboTabEditor" style="display:none" class="row">
+							<h3>Combo Name Editor</h3>
+							<input id="oldComboName" type="hidden">
+							<input id="newComboName" type="text">
+							<input type="button" value="OK" onclick="changeComboName();">
+							<input type="button" value="Cancel" onclick="hideComboTabEditor();">
 
-                    <div id="effectEditorArea" style="border: 1px solid;">
+						</div>
+
+					</div>
+
+				</div>   <!--effectDrawingArea -->
+
+				<div id="effectEditorArea" style="border: 1px solid;">
 
 
-                        <div id="effectEditorTabGroup" style="overflow-x:auto;overflow-y:hidden">
-                            <ul id="effectEditorTabGroupDiv" class="nav nav-tabs"></ul>
+					<div id="effectEditorTabGroup" style="overflow-x:auto;overflow-y:hidden">
+						<ul id="effectEditorTabGroupDiv" class="nav nav-tabs"></ul>
 
-                        </div>
-                        <div class="col-sm-12" style="overflow-y:auto;overflow-x:hidden;height:230px">
+					</div>
+					<div class="col-sm-12" style="overflow-y:auto;overflow-x:hidden;height:230px">
 
-                            <div id="effectEditorForm" >
+						<div id="effectEditorForm" >
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <script>
-                            function inspect(obj) {
-                            var str = new Array();
-                                    var element = null;
-                                    for (element in obj) { str[str.length] = element; }
-                            str.sort();
-                                    alert(obj + ":" + str.join(' '));
-                            }
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+			function inspect(obj) {
+				var str = new Array();
+				var element = null;
+				for (element in obj) { str[str.length] = element; }
+				str.sort();
+				alert(obj + ":" + str.join(' '));
+			}
 
-                    sidebarSvg = d3.select("#sidebar")
-                            .append("svg")
-                            .attr("id", "sidebarSvg");
+			sidebarSvg = d3.select("#sidebar")
+			.append("svg")
+			.attr("id", "sidebarSvg");
 
-                    comboDrawingAreaSvg = d3.select("#comboDrawingAreaCanvas")
-                            .append("svg")
-                            .attr("id", "comboDrawingAreaSvg");
+			comboDrawingAreaSvg = d3.select("#comboDrawingAreaCanvas")
+			.append("svg")
+			.attr("id", "comboDrawingAreaSvg");
 
-                    effectDrawingAreaSvg[0] = d3.select("#effectDrawingAreaCanvas_0")
-                            .append("svg")
-                            .attr("id", "effectDrawingAreaSvg_0")
-                            .on("mouseup", effectDrawingAreaMouseUp)
-                            .on("mousemove", effectDrawingAreaMouseMove);
+			effectDrawingAreaSvg[0] = d3.select("#effectDrawingAreaCanvas_0")
+			.append("svg")
+			.attr("id", "effectDrawingAreaSvg_0")
+			.on("mouseup", effectDrawingAreaMouseUp)
+			.on("mousemove", effectDrawingAreaMouseMove);
 
-                    effectDrawingAreaSvg[1] = d3.select("#effectDrawingAreaCanvas_1")
-                            .append("svg")
-                            .attr("id", "effectDrawingAreaSvg_1")
-                            .on("mouseup", effectDrawingAreaMouseUp)
-                            .on("mousemove", effectDrawingAreaMouseMove);
+			effectDrawingAreaSvg[1] = d3.select("#effectDrawingAreaCanvas_1")
+			.append("svg")
+			.attr("id", "effectDrawingAreaSvg_1")
+			.on("mouseup", effectDrawingAreaMouseUp)
+			.on("mousemove", effectDrawingAreaMouseMove);
 
-                    effectDrawingAreaSvg[2] = d3.select("#effectDrawingAreaCanvas_2")
-                            .append("svg")
-                            .attr("id", "effectDrawingAreaSvg_2")
-                            .on("mouseup", effectDrawingAreaMouseUp)
-                            .on("mousemove", effectDrawingAreaMouseMove);
+			effectDrawingAreaSvg[2] = d3.select("#effectDrawingAreaCanvas_2")
+			.append("svg")
+			.attr("id", "effectDrawingAreaSvg_2")
+			.on("mouseup", effectDrawingAreaMouseUp)
+			.on("mousemove", effectDrawingAreaMouseMove);
 
-                            effectEditorArea = document.getElementById("effectEditorArea");
+			effectEditorArea = document.getElementById("effectEditorArea");
 
-                            function main()
-                            {
-                            //initDrawingAreaDraggingElement();
-                            effectDrawingAreaChange = 1;
-                                    sidebarInit();
-                                    initMenubar();
+			function main()
+			{
+				//initDrawingAreaDraggingElement();
+				effectDrawingAreaChange = 1;
+				sidebarInit();
+				initMenubar();
 
-                                    effectDrawingAreaInit();
-                                    effectEditorInit();
-                                    setInterval(updateData, updateIntervalTime);
+				effectDrawingAreaInit();
+				effectEditorInit();
+				//setInterval(updateData, updateIntervalTime);
 
-                            }
-                </script>
+			}
+			</script>
 
-                <script>
+			<script>
 
-                </script>
-                <!--  End of plugin GUI code --->
-            </div> <!--  End of sidebar_effectDrawingAreaProcessEditor  --->
-        </div> <!--  End of container --->
-    </body>
+			</script>
+		<!--  End of plugin GUI code --->
+		</div> <!-- End of sidebar_effectDrawingArea_Editor -->
+		</div> <!--  End of sidebar_effectDrawingAreaProcessEditor  --->
+	</div>
+</div>
+
+</body>
 </html>

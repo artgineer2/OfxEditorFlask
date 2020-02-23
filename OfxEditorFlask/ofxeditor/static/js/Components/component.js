@@ -33,20 +33,20 @@ function Component(parent, jsonData)
   .on("click", function(){componentClick();});
 
 
-  //this.inputArray = new Array;
+
   this.inputMap = {};
 
   for(var inputIndex = 0; inputIndex < jsonData.inputArray.length; inputIndex++)
   {
-    var input = new Connector(symbolGroup, /*jsonData.name*/this, jsonData.inputArray[inputIndex].name, "input",
+    var input = new Connector(symbolGroup, this, jsonData.inputArray[inputIndex].name, "input",
       jsonData.inputArray[inputIndex].x, jsonData.inputArray[inputIndex].y);
 
-    //this.inputArray.push(input);
+
     this.inputMap[jsonData.inputArray[inputIndex].name] = input;
   }
 
   this.symbol.process = null;
-  	
+
   this.symbol.graphic = jsonData.symbol.graphic;
   this.symbol.body = jsonData.symbol.body;
   this.symbol.labels = jsonData.symbol.labels;
@@ -54,22 +54,22 @@ function Component(parent, jsonData)
   this.symbolBody = new Symbol(symbolGroup, this.symbol.process, this.symbol.body, this.symbol.graphic, this.symbol.color, this.symbol.location.x, this.symbol.location.y,
     this.symbol.labels);
 
-  this.control = new Connector(symbolGroup, /*null*/this, this.name+"Control", "control", 0, 100);
+  this.control = new Connector(symbolGroup, this, this.name+"Control", "control", 0, 100);
 
 
-    //this.outputArray = new Array;
+
     this.outputMap = {};
 
   for(var outputIndex = 0; outputIndex < jsonData.outputArray.length; outputIndex++)
   {
-    var output = new Connector(symbolGroup, /*jsonData.name*/this, jsonData.outputArray[outputIndex].name, "output",
+    var output = new Connector(symbolGroup, this, jsonData.outputArray[outputIndex].name, "output",
       jsonData.outputArray[outputIndex].x, jsonData.outputArray[outputIndex].y);
 
-    //this.outputArray.push(output);
+
     this.outputMap[jsonData.outputArray[outputIndex].name] = output;
   }
 
-    //this.paramArray = new Array;
+
     this.paramMap = {};
 
     this.footswitch = new Footswitch(null, this);
@@ -80,11 +80,8 @@ function Component(parent, jsonData)
     var param = new Parameter(null,symbolGroup , this, jsonData.paramArray[paramIndex].name, jsonData.paramArray[paramIndex].abbr,
       jsonData.paramArray[paramIndex].alias, jsonData.paramArray[paramIndex].value, jsonData.paramArray[paramIndex].type
       , jsonData.paramArray[paramIndex].x, jsonData.paramArray[paramIndex].y);
-      /*var param = new Parameter(sidebarGroup, this.name, component.paramMap[paramKey].name, component.paramMap[paramKey].abbr,
-        component.paramMap[paramKey].alias, component.paramMap[paramKey].value, component.paramMap[paramKey].type);*/
 
 
-    //this.paramArray.push(param);
     this.paramMap[jsonData.paramArray[paramIndex].name] = param;
   }
 }
@@ -103,7 +100,7 @@ Component.prototype.draw = function()
   {
 	  this.paramMap[paramKey].controlConn.draw();
   }
-  
+
   for(var outputKey in this.outputMap)
   {
     this.outputMap[outputKey].draw();

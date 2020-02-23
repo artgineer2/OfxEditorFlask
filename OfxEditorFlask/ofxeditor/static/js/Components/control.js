@@ -26,7 +26,7 @@ function Control(parent, control, parentEffect)
 	{
 	  this.symbol.location.x = control.symbol.location.x;
 	}
-  
+
   if(control.y)
   {
 	  this.symbol.location.y = control.y;
@@ -35,9 +35,9 @@ function Control(parent, control, parentEffect)
 	{
 	  this.symbol.location.y = control.symbol.location.y;
 	}
-  
-  
-  
+
+
+
 
   // this only creates the SVG group for encapsulating the symbol SVG parts
   var symbolData = {"name":this.name,"type":"control","x":this.symbol.location.x,"y":this.symbol.location.y};
@@ -75,13 +75,13 @@ function Control(parent, control, parentEffect)
 
 
   this.output = new Connector(symbolGroup, this.name, "output", "output",
-  /*this.symbol.location.x+*/25, /*this.symbol.location.y*/-25);
-  
+ 25, -25);
+
   this.paramControlType = new ParameterControlType(editorFormGroup, this);
- 
+
   this.controlParameterMap = {};
 
-  
+
   if(control.controlParameterArray != null )
   {
 	  for(var paramIndex = 0; paramIndex < control.controlParameterArray.length; paramIndex++)
@@ -95,12 +95,12 @@ function Control(parent, control, parentEffect)
   else
   {
 	  var paramData = {"name":"parameter","alias":"parameter","abbr":"prm","type":0, "value":0};
-      this.controlParameterMap["parameter"] = 
+      this.controlParameterMap["parameter"] =
       	new ControlParameter(editorFormGroup, paramData, this);
 
   }
-  
-  
+
+
 }
 
 
@@ -140,17 +140,17 @@ Control.prototype.draw = function()
 		{
 			this.symbolBody.draw(normGraphic);
 		}
-		
+
 	  else if(this.type == "Env")
 		{
 			this.symbolBody.draw(envGraphic);
 		}
- 
+
 	  else if(this.type == "LFO")
 		{
 			this.symbolBody.draw(lfoGraphic);
 		}
- 
+
   }
 
   for(var paramKey in this.paramMap)
@@ -184,7 +184,7 @@ Control.prototype.erase = function()
 Control.prototype.getControlData = function()
 {
 	var controlDataMap = {};
-	
+
 	controlDataMap.name = this.name;
 	controlDataMap.type = this.type;
 	controlDataMap.symbol = {};
@@ -194,8 +194,8 @@ Control.prototype.getControlData = function()
   controlDataMap.symbol.graphic = this.symbol.graphic;
   controlDataMap.symbol.labels = this.symbol.labels;
   controlDataMap.symbol.color = this.symbol.color;
- 
-  
+
+
   controlDataMap.controlParameterArray = new Array;
 
   {
@@ -210,7 +210,7 @@ Control.prototype.getControlData = function()
 	      controlDataMap.controlParameterArray.push(controlParameter);
 	  }
   }
-  
+
   return controlDataMap;
 
 }
@@ -222,19 +222,13 @@ function addControl(jsonControlData)
   combo.effectMap[combo.currentEffect].effectControlMap[control.name] = control;
   controlCount++;
   combo.effectMap[combo.currentEffect].effectControlMap[control.name].draw();
-  //controlMap[control.name].updateEditorForm();
-  //updateControlEditorArea(controlMap);
 }
 
 
 function deleteControl(target)
 {
-  /*var evt = d3.event;
-  var connectionArrayIndex, procInputIndex, procOutputIndex=0;
-  var target = evt.currentTarget*/
   var svgObject = target.farthestViewportElement;
   var svgChildNodes = svgObject.childNodes;
-  //var wires = document.getElementsByTagName("line");
 
   var control = target;
   var name = target.id;
@@ -251,13 +245,9 @@ function deleteControl(target)
     var connDestControl = connectionKeyParse[1][0];
     var connDestPort = connectionKeyParse[1][1];
     var svgIndex = combo.effectMap[combo.currentEffect].index;
-    //if(controlConnectionArray.length > 1)
-    {
       // delete wires connected to inputs
       if(connDestControl == name)
       {
-        //delete controlConnectionMap[controlConnectionKey];
-        //controlConnectionMap[controlConnectionKey].delete();
         var targetConnection = document.getElementById(controlConnectionKey);
         deleteControlConnection(svgIndex, targetConnection);
       }
@@ -266,10 +256,7 @@ function deleteControl(target)
       {
         var targetConnection = document.getElementById(controlConnectionKey);
         deleteControlConnection(svgIndex, targetConnection);
-        //delete controlConnectionMap[controlConnectionKey];
-        //controlConnectionMap[controlConnectionKey].delete();
       }
-    }
   }
 
   var type = combo.effectMap[combo.currentEffect].effectControlMap[control.id].type;
@@ -278,7 +265,6 @@ function deleteControl(target)
   controlCount--;
   updateEffectEditorArea(combo.effectMap[combo.currentEffect]);
 
-  //controlRemoved = 1;
 }
 
 function updateControlMap()

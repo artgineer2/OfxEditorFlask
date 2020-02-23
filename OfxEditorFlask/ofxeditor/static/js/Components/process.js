@@ -4,11 +4,6 @@ function Process(parent, component, parentEffect)
 
   this.name = component.name;
   this.type = component.type;
-  /*if(component.cpuPower)
-  {
-      this.cpuPower = component.cpuPower;
-      updateCpuPowerRequired(this.cpuPower);
- }*/
   if(component.footswitchType)
   {
       this.footswitchType = component.footswitchType;
@@ -55,9 +50,7 @@ function Process(parent, component, parentEffect)
       })
       .on("dblclick", function(){
     	  processDoubleClick(evt);
-    })/*.on('contextmenu', function(){
-          return false;
-      })*/.on('contextmenu', function(){
+    }).on('contextmenu', function(){
             var evt = d3.event;
             evt.preventDefault();
         }, false);
@@ -69,7 +62,6 @@ function Process(parent, component, parentEffect)
       symbolGroup = this.parent;  // create SVG components
   }
 
-    //this.inputArray = new Array;
     this.inputMap = {};
 
   for(var inputKey in component.inputMap)
@@ -80,9 +72,6 @@ function Process(parent, component, parentEffect)
     this.inputMap[component.inputMap[inputKey].name] = input;
   }
 
-  //this.control = new Connector(symbolGroup, this.name+"Control", "control", 0, 100);
-
-    //this.outputArray = new Array;
     this.outputMap = {};
 
     for(var outputKey in component.outputMap)
@@ -90,11 +79,9 @@ function Process(parent, component, parentEffect)
       var output = new Connector(symbolGroup, this, component.outputMap[outputKey].name, "output",
         component.outputMap[outputKey].x, component.outputMap[outputKey].y);
 
-      //this.outputArray.push(output);
       this.outputMap[component.outputMap[outputKey].name] = output;
     }
 
-    //this.paramArray = new Array;
     this.paramMap = {};
 
     this.footswitch = new Footswitch(editorFormGroup, this);
@@ -106,10 +93,8 @@ function Process(parent, component, parentEffect)
         component.paramMap[paramKey].alias, component.paramMap[paramKey].value, component.paramMap[paramKey].type,
         component.paramMap[paramKey].x, component.paramMap[paramKey].y);
 
-      //this.paramArray.push(param);
       this.paramMap[component.paramMap[paramKey].name] = param;
     }
-  //processArrayUpdated = 1;
 }
 
 Process.prototype.draw = function()
@@ -167,25 +152,6 @@ Process.prototype.updateDirection = function(direction)
 	this.processDirection = direction;
 
 
-	  /*for(var inputKey in this.inputMap)
-	  {
-	    this.inputMap[inputKey].erase();
-	  }
-
-	  if(this.symbolBody)
-	  {
-		  this.symbolBody.erase();
-	  }
-
-	  for(var paramKey in this.paramMap)
-	  {
-	    this.paramMap[paramKey].controlConn.erase();
-	  }
-
-	  for(var outputKey in this.outputMap)
-	  {
-	    this.outputMap[outputKey].erase();
-	  }*/
 	this.erase();
 	this.draw();
 
@@ -203,7 +169,6 @@ Process.prototype.update = function(keyValuePair)
 {
     var key = keyValuePair.keys[0];
     var value = keyValuePair[key];
-    //console.log("Process key:":key+"\tProcess value:":value);
 }
 
 Process.prototype.updateEditorForm = function()
@@ -220,20 +185,19 @@ Process.prototype.getProcessData = function ()
 
   processDataMap.name = this.name;
   processDataMap.type = this.type;
-  //processDataMap.cpuPower = this.cpuPower;
   processDataMap.footswitchType = this.footswitchType;
   processDataMap.footswitchNumber = this.footswitchNumber;
   processDataMap.processDirection = this.processDirection; // normal or feedback
-  processDataMap.symbol = {};//"location":{},"graphic":"","labels":{}};
+  processDataMap.symbol = {};
 
   processDataMap.symbol.location = this.getLocation();
-  processDataMap.parentEffect = this.parentEffect;//{"name":this.parentEffect,"abbr":"fx0"};
-    //this.inputArray = new Array;
+  processDataMap.parentEffect = this.parentEffect;
+
     processDataMap.inputArray = new Array;
 
   for(var inputKey in this.inputMap)
   {
-    var input = {/*"port":this.inputMap[inputKey].port,*/"name":this.inputMap[inputKey].name,
+    var input = {"name":this.inputMap[inputKey].name,
     "x":this.inputMap[inputKey].x, "y":this.inputMap[inputKey].y};
 
     processDataMap.inputArray.push(input);
@@ -245,12 +209,11 @@ Process.prototype.getProcessData = function ()
   processDataMap.symbol.labels = this.symbol.labels;
   processDataMap.symbol.color = this.symbol.color;
 
-    //this.outputArray = new Array;
     processDataMap.outputArray = new Array;
 
     for(var outputKey in this.outputMap)
     {
-      var output = {/*"port":this.outputMap[outputKey].port,*/"name":this.outputMap[outputKey].name,
+      var output = {"name":this.outputMap[outputKey].name,
       "x":this.outputMap[outputKey].x, "y":this.outputMap[outputKey].y};
 
       processDataMap.outputArray.push(output);
@@ -312,30 +275,19 @@ function addProcess(jsonProcessData)
   combo.effectMap[combo.currentEffect].effectProcessMap[process.name] = process;
   combo.effectMap[combo.currentEffect].effectProcessMap[process.name].draw();
   processTypeCount[process.type]++;
-  //processMap[process.name].updateEditorForm();
-  //updateProcessEditorArea(processMap);
 }
 
 
 function deleteProcess(target)
 {
-  /*var evt = d3.event;
-  var connectionArrayIndex, procInputIndex, procOutputIndex=0;
-  var target = evt.currentTarget*/
   var svgObject = target.farthestViewportElement;
   var svgChildNodes = svgObject.childNodes;
-  //var wires = document.getElementsByTagName("line");
 
   var process = target;
   var name = target.id;
   var processType = name.split('_')[0];
   var capProcessType = processType.charAt(0).toUpperCase() + processType.slice(1);
-  /*var processCpuPower = componentMap[capProcessType].cpuPower;
-  if(totalCpuPowerRequired > 0)
-  {
-      var deletedPower = -processCpuPower;
-      updateCpuPowerRequired(deletedPower);
-  }*/
+
   // delete connected process wires before deleting process
   for(var processConnectionKey in combo.effectMap[combo.currentEffect].effectIntraConnectionMap)
   {
@@ -347,13 +299,9 @@ function deleteProcess(target)
     var connDestProcess = connectionKeyParse[1][0];
     var connDestPort = connectionKeyParse[1][1];
     var svgIndex = combo.effectMap[combo.currentEffect].index;
-    //if(processConnectionArray.length > 1)
-    {
       // delete wires connected to inputs
       if(connDestProcess == name)
       {
-        //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
         var targetConnection = document.getElementById(processConnectionKey);
         deleteConnection(svgIndex, targetConnection);
       }
@@ -362,10 +310,7 @@ function deleteProcess(target)
       {
         var targetConnection = document.getElementById(processConnectionKey);
         deleteConnection(svgIndex, targetConnection);
-        //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
       }
-    }
   }
 
   // delete connected control wires before deleting process
@@ -377,13 +322,9 @@ function deleteProcess(target)
     var connDestProcess = controlConnectionKeyParse[1][0];
     var connDestParameter = controlConnectionKeyParse[1][1];
     var svgIndex = combo.effectMap[combo.currentEffect].index;
-    //if(processConnectionArray.length > 1)
-    {
       // delete wires connected to inputs
       if(connDestProcess == name)
       {
-        //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
         var targetConnection = document.getElementById(controlConnectionKey);
         deleteControlConnection(svgIndex, targetConnection);
       }
@@ -392,10 +333,7 @@ function deleteProcess(target)
       {
         var targetConnection = document.getElementById(controlConnectionKey);
         deleteControlConnection(svgIndex, targetConnection);
-        //delete processConnectionMap[processConnectionKey];
-        //processConnectionMap[processConnectionKey].delete();
       }
-    }
   }
 
   var type = combo.effectMap[combo.currentEffect].effectProcessMap[process.id].type;
@@ -404,7 +342,6 @@ function deleteProcess(target)
   process.remove();
   updateEffectEditorArea(combo.effectMap[combo.currentEffect]);
 
-  //processRemoved = 1;
 }
 
 function updateProcessMap()

@@ -8,7 +8,7 @@ function Wire(parent, src, dest, parentEffect)
 
   this.xmid = this.mid.x;
   this.ymid = this.mid.y;
-  
+
   var srcProcess;
   var destProcess;
 
@@ -18,7 +18,7 @@ function Wire(parent, src, dest, parentEffect)
 	  srcProcess = "("+this.parentEffect.name+")";//this.src.effect;
 	  if(this.src.effect != srcProcess) this.src.effect = srcProcess;
 	}
-	  
+
   else srcProcess = this.src.process;
   //if(this.dest.effect) destProcess = this.dest.effect;
   if(this.dest.effect)
@@ -77,9 +77,9 @@ Wire.prototype.draw = function()
   var srcPointData;
   var destProcessData;
   var destPointData;
-  var srcDirection; 
+  var srcDirection;
   var destDirection;
-  
+
   if(this.src.effect)//if(this.src.process.indexOf("(") >= 0)
   {
       srcPointData = {"base":{"x":this.x1, "y":this.y1}, "offset":{"x":0,"y":0}};
@@ -106,24 +106,24 @@ Wire.prototype.draw = function()
   var svgValue = this.parent[0][0];
   var svgValueId = svgValue.id;
   var svgIndex = parseInt(svgValueId.split("_")[1]);
-  
+
   if(this.src.process)
 	{
 	  srcDirection = this.parentEffect.effectProcessMap[this.src.process].processDirection;
 	}
   else srcDirection = "normal";
-    
+
   if(this.dest.process)
 	{
 	  destDirection   = this.parentEffect.effectProcessMap[this.dest.process].processDirection;
 	}
   else destDirection = "normal";
-   
+
   var x1Data;
   var y1Data;
   var x2Data;
   var y2Data;
-  
+
 
   if(srcDirection == "normal")
   {
@@ -134,7 +134,7 @@ Wire.prototype.draw = function()
   	x1Data = lineData.src.base.x + lineData.src.offset.x - 90;
   }
   y1Data = lineData.src.base.y + lineData.src.offset.y;
-  
+
   if(destDirection == "normal")
   {
   	x2Data = lineData.dest.base.x + lineData.dest.offset.x;
@@ -146,27 +146,21 @@ Wire.prototype.draw = function()
   y2Data = lineData.dest.base.y + lineData.dest.offset.y;
 
   var radians = -Math.abs(Math.atan((y1Data-y2Data)/(x2Data-x1Data)));
-  var xPolarity; 
+  var xPolarity;
   var yPolarity;
   if(x2Data>=x1Data) xPolarity = 1;
   else if(x2Data<x1Data) xPolarity = -1;
   if(y2Data>=y1Data) yPolarity = -1;
   else if(y2Data<y1Data) yPolarity = 1;
- 
-  var procConnection = effectDrawingAreaSvg[svgIndex]/*.selectAll("line")  // create SVG process connection groups
 
-
-  /*.append("polyline")
-  .attr("id", function(){
-    return wireIdString;
-  })*/
+  var procConnection = effectDrawingAreaSvg[svgIndex]
   .append("line")
   .attr("id", function(){
     return wireIdString;
   })
   .attr("x1", function(){
 	  var x1Temp = x1Data+4*xPolarity*(Math.cos(radians));
-    return x1Temp; 
+    return x1Temp;
   })
   .attr("y1", function(){
 	  var y1Temp = y1Data+4*yPolarity*(Math.sin(radians));
@@ -190,7 +184,6 @@ Wire.prototype.draw = function()
   })
   .on("mouseover", function(){d3.select(this).style("stroke", "red");})
    .on("mouseout", function(){d3.select(this).style("stroke", "black");});
-   //.on("click", showConnectionId);
 }
 
 Wire.prototype.update = function()
@@ -206,7 +199,7 @@ Wire.prototype.update = function()
     var x2Data;
     var y2Data;
 
-    if(this.src.effect)//if(this.src.process.indexOf("(") == 0)
+    if(this.src.effect)
     {
         srcPointData = {"base":{"x":this.x1, "y":this.y1}, "offset":{"x":0,"y":0}};
         srcProcessData = {"processDirection":"normal"};
@@ -217,7 +210,7 @@ Wire.prototype.update = function()
         srcPointData = {"base":srcProcessData.getLocation(), "offset":srcProcessData.outputMap[this.src.port]};
     }
 
-    if(this.dest.effect)//if(this.dest.process.indexOf("(") == 0)
+    if(this.dest.effect)
     {
         destPointData = {"base":{"x":this.x2, "y":this.y2}, "offset":{"x":0,"y":0}};
         destProcessData = {"processDirection":"normal"};
@@ -228,19 +221,11 @@ Wire.prototype.update = function()
         destPointData = {"base":destProcessData.getLocation(), "offset":destProcessData.inputMap[this.dest.port]};
     }
 
-  /*srcProcessData = processMap[this.src.process];
-  srcPointData = {"base":srcProcessData.getLocation(), "offset":srcProcessData.outputMap[this.src.port]};*/
-  /*destProcessData = processMap[this.dest.process];
-  destPointData = {"base":destProcessData.getLocation(), "offset":destProcessData.inputMap[this.dest.port]};*/
   var lineData = {"src":srcPointData,"dest":destPointData};
 
-  var wireIdString = this.name;//this.src.process+':'+this.src.port+'>'+this.dest.process+':'+this.dest.port;
+  var wireIdString = this.name;
 
   var wireHandle = document.getElementById(wireIdString);
-  /*.attr("id", function(d){
-    var wireIdString = lineData.src.process+':'+lineData.src.port+'>'+lineData.dest.process+':'+lineData.dest.port;
-    return wireIdString;
-  })*/
   if(srcProcessData.processDirection == "normal")
   {
   	x1Data = lineData.src.base.x + lineData.src.offset.x;
@@ -250,7 +235,7 @@ Wire.prototype.update = function()
   	x1Data = lineData.src.base.x + lineData.src.offset.x - 90;
   }
   y1Data = lineData.src.base.y + lineData.src.offset.y;
-  
+
   if(destProcessData.processDirection == "normal")
   {
   	x2Data = lineData.dest.base.x + lineData.dest.offset.x;
@@ -261,43 +246,20 @@ Wire.prototype.update = function()
   }
   y2Data = lineData.dest.base.y + lineData.dest.offset.y;
 
-  //x1 = lineData.src.base.x + lineData.src.offset.x;
-  
-  /*if(srcProcessData.processDirection == "normal")
-  {
-	wireHandle.setAttribute("x1", x1);
-  }
-  else
-  {
-	  wireHandle.setAttribute("x1", x1-90);
-  }*/
-  	
-  
-  	//wireHandle.setAttribute("y1", lineData.src.base.y + lineData.src.offset.y);
+
+
   var radians = -Math.abs(Math.atan((y1Data-y2Data)/(x2Data-x1Data)));
-  var xPolarity; 
+  var xPolarity;
   var yPolarity;
   if(x2Data>=x1Data) xPolarity = 1;
   else if(x2Data<x1Data) xPolarity = -1;
   if(y2Data>=y1Data) yPolarity = -1;
   else if(y2Data<y1Data) yPolarity = 1;
-  
+
   wireHandle.setAttribute("x1", x1Data+4*xPolarity*(Math.cos(radians)));
   wireHandle.setAttribute("y1", y1Data+4*yPolarity*(Math.sin(radians)));
   wireHandle.setAttribute("x2", x2Data-4*xPolarity*(Math.cos(radians)));
   wireHandle.setAttribute("y2", y2Data-4*yPolarity*(Math.sin(radians)));
-  //x2 = lineData.dest.base.x + lineData.dest.offset.x
-  /*if(destProcessData.processDirection == "normal")
-	{
-	  wireHandle.setAttribute("x2", x2);
-	}
-  else
-	{
-	  wireHandle.setAttribute("x2", x2+90);
-	}*/
-  
-
-  	//wireHandle.setAttribute("y2", lineData.dest.base.y + lineData.dest.offset.y);
 }
 
 
@@ -306,17 +268,13 @@ Wire.prototype.getConnectionData = function()
 {
     var connectionDataMap = {};
 
-    //connectionDataMap.srcEffect = this.src.effect;
-    //connectionDataMap.srcProcess = this.src.process;
     connectionDataMap.srcPort = this.src.port;
-    //connectionDataMap.destEffect = this.dest.effect;
-    //connectionDataMap.destProcess = this.dest.process;
     connectionDataMap.destPort = this.dest.port;
     connectionDataMap.parentEffect = this.parentEffect.name;
 
 
 
-    if(this.src.effect)//if(connectionDataMap.srcProcess.indexOf("(")>=0)
+    if(this.src.effect)
     {
         connectionDataMap.x1 = effectIO[this.parentEffect.index].inputMap[this.src.port].x;
         connectionDataMap.y1 = effectIO[this.parentEffect.index].inputMap[this.src.port].y;
@@ -331,7 +289,7 @@ Wire.prototype.getConnectionData = function()
         connectionDataMap.srcProcess = this.src.process;
     }
 
-    if(this.dest.effect)//if(connectionDataMap.destProcess.indexOf("(")>=0)
+    if(this.dest.effect)
     {
         connectionDataMap.x2 = effectIO[this.parentEffect.index].outputMap[this.dest.port].x;
         connectionDataMap.y2 = effectIO[this.parentEffect.index].outputMap[this.dest.port].y;
@@ -351,44 +309,12 @@ Wire.prototype.getConnectionData = function()
 
 
 
-/*function deleteConnection(evt)
-{
-  var i,j = 0;
-  var evt = d3.event;
-  var srcProcess = evt.currentTarget.__data__.srcProcess;
-  var srcPort = evt.currentTarget.__data__.srcPort;
-  var destProcess = evt.currentTarget.__data__.destProcess;
-  var destPort = evt.currentTarget.__data__.destPort;
-  for(var connIndex = 0; connIndex < processConnectionArray.length; connIndex++)
-  {
-    if(processConnectionArray[connIndex].srcProcess == srcProcess && processConnectionArray[connIndex].srcPort == srcPort
-    && processConnectionArray[connIndex].destProcess == destProcess && processConnectionArray[connIndex].destPort == destPort)
-    {
-      processConnectionArray.splice(connIndex,1);
-    }
-  }
-
-  d3.event.currentTarget.remove();
-  updateDrawingArea();
-}*/
-
-/*function updateProcessConnectionMap()
-{
-  for(var i = 0; i < processConnectionArray.length; i++)
-  {
-    var proc = processConnectionArray[i];
-    var key = proc.srcProcess+':'+proc.srcPort+'>'+proc.destProcess+':'+proc.destPort;
-    processConnectionMap[key] = processConnectionArray[i];
-  }
-
-}*/
 
 
 
 function drawConnections(connections)
 {
 
-  //var processConnectionArray = new Array;
   for(var connectionKey in connections)
   {
       // filter by parent effect
@@ -403,8 +329,6 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 	// validate data first
 	if(jsonProcessConnectionData.src.process != null && jsonProcessConnectionData.dest.process != null)
 	{
-		  /*var connectionKeys = Object.keys(connection);
-		  var conIndex = connectionKeys.indexOf("srcProcess");*/
 		  if( Object.keys(jsonProcessConnectionData).indexOf("srcProcess") >= 0)
 		  {
 		    var oldConnection = jsonProcessConnectionData;
@@ -440,7 +364,6 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 		        conKey += jsonProcessConnectionData.dest.process+":"+jsonProcessConnectionData.dest.port;
 		    }
 
-		  //var src = {"process":}
 		  var srcProcessName = jsonProcessConnectionData.src.process;
 		  var srcEffectName = jsonProcessConnectionData.src.effect;
 		  var srcPortName = jsonProcessConnectionData.src.port;
@@ -450,7 +373,6 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 		  var destPortName = jsonProcessConnectionData.dest.port;
 
 		  var effectIndex = parentEffectIndex;
-		  //for(var key in combo.effectMap)
 		  var effectName = combo.currentEffect;//Object.keys(combo.effectMap)[effectIndex];
 
 		  if((srcProcessName.indexOf("(") == 0) && (destProcessName.indexOf("(") == 0))
@@ -462,7 +384,7 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 		                                  }
 		                              };
 		  }
-		  else if(jsonProcessConnectionData.src.process.indexOf("(") == 0)//if(srcProcessName == "system")
+		  else if(jsonProcessConnectionData.src.process.indexOf("(") == 0)
 		  {
 		      var destProcess = combo.effectMap[effectName].effectProcessMap[jsonProcessConnectionData.dest.process];
 		      var sysOutputIndex;
@@ -475,7 +397,7 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 		                          "y":jsonProcessConnectionData.dest.y + destProcess.inputMap[jsonProcessConnectionData.dest.port].y}};
 
 		  }
-		  else if(jsonProcessConnectionData.dest.process.indexOf("(") == 0)//if(destProcessName == "system")
+		  else if(jsonProcessConnectionData.dest.process.indexOf("(") == 0)
 		  {
 		      var srcProcess = combo.effectMap[effectName].effectProcessMap[jsonProcessConnectionData.src.process];
 		      var sysInputIndex;
@@ -492,28 +414,6 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 		  }
 		  else
 		  {
-		      /*if(jsonProcessConnectionData.src.process.indexOf("(") == 0)
-		      {
-		          var effectName = jsonProcessConnectionData.src.process.replace("(","");
-		          effectName = effectName.replace(")","");
-		          effectIndex
-		          srcProcess = effectIO[combo.effectMap[effectName].index];
-		      }
-		      else
-		      {
-		          srcProcess = combo.effectMap[combo.currentEffect].effectProcessMap[jsonProcessConnectionData.src.process];
-		      }
-
-		      if(jsonProcessConnectionData.dest.process.indexOf("(") == 0)
-		      {
-		          var effectName = jsonProcessConnectionData.dest.process.replace("(","");
-		          effectName = effectName.replace(")","");
-		          destProcess = effectIO[combo.effectMap[effectName].index];
-		      }
-		      else
-		      {
-		          destProcess = combo.effectMap[combo.currentEffect].effectProcessMap[jsonProcessConnectionData.dest.process];
-		      }*/
 		      var srcProcess = combo.effectMap[effectName].effectProcessMap[jsonProcessConnectionData.src.process];
 		      var destProcess = combo.effectMap[effectName].effectProcessMap[jsonProcessConnectionData.dest.process];
 
@@ -528,19 +428,11 @@ function addConnection(parentEffectIndex, jsonProcessConnectionData)
 
 		  }
 
-		  //var testcoords = srcProcess.outputMap[jsonProcessConnectionData.src.port];
-		  //var testcoord_x = testcoords.x;
-
-		  /*var evt = d3.event;
-		  var target = evt.currentTarget;*/
 		  // modifiy x/y locations in newConnection data to set proper connection locations
 		  var connObject = new Wire(effectDrawingAreaSvg[effectIndex],conValue.src, conValue.dest, combo.effectMap[effectName]);
 		  //processConnectionArray.push(connObject);
 		  combo.effectMap[combo.currentEffect].effectIntraConnectionMap[conKey] = connObject;
 		  combo.effectMap[combo.currentEffect].effectIntraConnectionMap[conKey].draw();
-		  //processMap[connection.srcProcess.name].output
-
-		  //updateDrawingArea();		
 	}
 }
 
@@ -552,27 +444,24 @@ function deleteConnection(parentEffectIndex, target)
 	parsedConnName[0] = parsedConnName[0].split(":");
 	parsedConnName[1] = parsedConnName[1].split(":");
 	var effectName;
-	
+
 	if(parsedConnName[0][0].indexOf('(') >= 0)
 	{
 		var beginning = parsedConnName[0][0].indexOf('(')+1;
 		var end = parsedConnName[0][0].indexOf(')')-1;
 		effectName = parsedConnName[0][0].substr(beginning,end);
-		  //delete combo.effectMap[effectName].effectIntraConnectionMap[target.id];
 	}
 	else if(parsedConnName[1][0].indexOf('(') >= 0)
 	{
 		var beginning = parsedConnName[1][0].indexOf('(')+1;
 		var end = parsedConnName[1][0].indexOf(')')-1;
 		effectName = parsedConnName[1][0].substr(beginning,end);
-		 // delete combo.effectMap[effectName].effectIntraConnectionMap[target.id];
 	}
 	else
 	{
 		effectName = Object.keys(combo.effectMap)[parentEffectIndex];
 	}
-	
-    //var effectName = Object.keys(combo.effectMap)[parentEffectIndex];
+
   delete combo.effectMap[effectName].effectIntraConnectionMap[target.id];
   target.remove();
 }
