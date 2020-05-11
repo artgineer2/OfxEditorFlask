@@ -1,4 +1,4 @@
-# OfxEditorFlask
+# OfxEditorFlask (NOTE: This is no longer running on AWS)
 
 The frontend of this application was originally going to be used in an embedded server in the FLX pedal:
 
